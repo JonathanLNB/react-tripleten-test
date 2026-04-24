@@ -1,18 +1,18 @@
-import React from 'react';
-import Card from './Card';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import React from "react";
+import Card from "./Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
-
-let imageStyle = { backgroundImage: `url(${currentUser.avatar})` };
+  if (!currentUser) return null;
+  let imageStyle = { backgroundImage: `url(${currentUser.avatar})` };
 
   return (
     <main className="content">
- <section className="profile page__section">
+      <section className="profile page__section">
         <div className="profile__image" onClick={onEditAvatar} style={imageStyle}></div>
         <div className="profile__info">
-       <h1 className="profile__title">{currentUser.name}</h1>
+          <h1 className="profile__title">{currentUser.name}</h1>
           <button className="profile__edit-button" type="button" onClick={onEditProfile}></button>
           <p className="profile__description">{currentUser.about}</p>
         </div>
