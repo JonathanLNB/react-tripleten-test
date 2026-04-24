@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, useHistory, Switch } from "react-router-dom";
-import api from "./api";
+import api from "../services/api";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -108,6 +108,13 @@ function App() {
     }).catch((err) => console.log(err));
   }
 
+  function handleUpdateAvatar(avatarUpdate) {
+    api.setUserAvatar(avatarUpdate).then((newUserData) => {
+      setCurrentUser(newUserData);
+      closeAllPopups();
+    }).catch((err) => console.log(err));
+  }
+
   function onRegister({ email, password }) {
     auth.register(email, password)
       .then((res) => {
@@ -150,7 +157,8 @@ function App() {
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
         <PopupWithForm title="Are you sure?" name="remove-card" buttonText="Yes" />
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} setCurrentUser={setCurrentUser} onClose={closeAllPopups} />
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar}
+                        onClose={closeAllPopups} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} status={tooltipStatus} />
       </div>

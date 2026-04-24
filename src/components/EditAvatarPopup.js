@@ -1,34 +1,25 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
-import api from "./api";
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
-function EditAvatarPopup({ isOpen, setCurrentUser, onClose }) {
+function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose }) {
   const inputRef = React.useRef();
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
 
-function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-
-    handleUpdateAvatar({
-      avatar: inputRef.current.value,
-});
+    onUpdateAvatar({
+      avatar: inputRef.current.value
+    });
   }
 
-  function handleUpdateAvatar(avatarUpdate) {
-  console.log(avatarUpdate);
-    api.setUserAvatar(avatarUpdate).then((newUserData) => {
-      setCurrentUser(newUserData);
-      onClose();
-    })
-  }
   function handleChange(e) {
     const input = e.target;
-    const {value} = input;
+    const { value } = input;
     setValue(value);
   }
 
   return (
-<PopupWithForm
+    <PopupWithForm
       isOpen={isOpen} onSubmit={handleSubmit} onClose={onClose} title="Change profile picture" name="edit-avatar"
     >
 
@@ -40,7 +31,7 @@ function handleSubmit(e) {
                required ref={inputRef} />
         <span className="popup__error" id="owner-avatar-error"></span>
       </label>
-</PopupWithForm>
+    </PopupWithForm>
   );
 }
 
