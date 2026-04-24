@@ -1,0 +1,45 @@
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
+
+function AddPlacePopup({ isOpen, onAddPlace }) {
+  const [name, setname] = React.useState();
+const [link, setLink] = React.useState();
+
+  function handleNameChange(e) {
+    setname(e.target.value);
+  }
+
+function handleLinkChange(e) {
+    setLink(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+      onAddPlace({
+      name,
+      link
+    });
+  }
+
+  return (
+  <PopupWithForm
+      isOpen={isOpen} onSubmit={handleSubmit} title="New place" name="new-card"
+    >
+      <label className="popup__label">
+        <input type="text" name="name" id="place-name"
+      className="popup__input popup__input_type_card-name" placeholder="Name"
+      required minLength="1" maxLength="30" value={name} onChange={handleNameChange} />
+        <span className="popup__error" id="place-name-error"></span>
+      </label>
+      <label className="popup__label">
+        <input type="text" name="link" id="place-link"
+               className="popup__input popup__input_type_url" placeholder="Image URL"
+               required value={link} onChange={handleLinkChange} />
+        <span className="popup__error" id="place-link-error"></span>
+      </label>
+    </PopupWithForm>
+  );
+}
+
+export default AddPlacePopup;
