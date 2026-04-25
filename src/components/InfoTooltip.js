@@ -2,7 +2,7 @@ import React from "react";
 import SuccessIcon from "../images/success-icon.svg";
 import ErrorIcon from "../images/error-icon.svg";
 
-function InfoTooltip({ isOpen, onClose, status }) {
+function InfoTooltip({ isOpen, onClose, status, message }) {
   return (
     <div className={`popup ${isOpen && "popup_is-opened"}`} onMouseDown={(e) => {
       if (e.target === e.currentTarget) {
@@ -15,11 +15,11 @@ function InfoTooltip({ isOpen, onClose, status }) {
           {status === "success" ?
             <div>
               <img className="popup__icon" src={SuccessIcon} alt="" />
-              <p className="popup__status-message">Success! You have now been registered.</p>
+              <p className="popup__status-message">{message}</p>
             </div>
             :
             <div><img className="popup__icon" src={ErrorIcon} alt="" />
-              <p className="popup__status-message">Oops, something went wrong! <br />
+              <p className="popup__status-message">{message} <br />
                 Please try again.</p>
             </div>
           }

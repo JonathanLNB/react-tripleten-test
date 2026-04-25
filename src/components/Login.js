@@ -2,12 +2,12 @@ import React from "react";
 
 import "../blocks/login/login.css";
 
-function Login({ onLogin }) {
+function Login({ isSaving, onLogin }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
     onLogin(email, password);
   }
 
@@ -27,7 +27,8 @@ function Login({ onLogin }) {
                    onChange={e => setPassword(e.target.value)} required />
           </label>
         </div>
-        <button className="auth-form__button" type="submit">Sign in</button>
+        <button className="auth-form__button" type="submit"
+                disabled={isSaving}> {isSaving ? "Signing in..." : "Sign in"}</button>
       </form>
     </div>
   );

@@ -7,6 +7,7 @@ function PopupWithForm({
                          buttonText = "Save",
                          onSubmit,
                          onClose,
+                         isSaving,
                          children
                        }) {
   return (
@@ -20,7 +21,8 @@ function PopupWithForm({
           <button type="button" className="popup__close" onClick={onClose}></button>
           <h3 className="popup__title">{title}</h3>
           {children}
-          <button type="submit" className="button popup__button">{buttonText}</button>
+          <button type="submit" className="button popup__button"
+                  disabled={isSaving}>{isSaving ? "Loading..." : buttonText}</button>
         </form>
       </div>
     </div>

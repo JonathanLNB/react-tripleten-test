@@ -15,6 +15,7 @@ import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { ALERT_MESSAGES } from "../utils/constants";
 
 function App() {
   const history = useHistory();
@@ -26,26 +27,30 @@ function App() {
   const [cards, setCards] = React.useState([]);
 
   const [tooltipStatus, setTooltipStatus] = React.useState("");
+  const [alertMessage, setAlertMessage] = React.useState("");
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
 
   React.useEffect(() => {
     let token = localStorage.getItem("jwt");
     if (token) {
       authApi.checkToken(token).then((checkTokenResponse) => {
-        console.log("checkTokenResponse", checkTokenResponse);
         if (checkTokenResponse) {
           setIsLoggedIn(true);
           history.push("/");
         } else {
           localStorage.removeItem("jwt");
         }
-      }).catch(err => console.log(err));
+      }).catch(err => {
+        showMessage(false, ALERT_MESSAGES.checkTokenError);
+        console.log(err);
+      });
     }
   }, [history]);
 
@@ -55,12 +60,15 @@ function App() {
         setCurrentUser(userData);
         setCards(cardData);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        showMessage(false, ALERT_MESSAGES.getAppInfoError);
+        console.log(err);
+      });
   }, []);
 
   React.useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
+    function handleEscClose(event) {
+      if (event.key === "Escape") {
         closeAllPopups();
       }
     }
@@ -88,9 +96,10 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsInfoToolTipOpen(false);
-    setSelectedCard(null);
     setIsDeletePopupOpen(false);
+    setSelectedCard(null);
     setCardToDelete(null);
+    setIsSaving(false);
   }
 
   function handleCardClick(card) {
@@ -98,17 +107,27 @@ function App() {
   }
 
   function handleUpdateUser(userUpdate) {
+    setIsSaving(true);
     api.setUserInfo(userUpdate).then((newUserData) => {
       setCurrentUser(newUserData);
       closeAllPopups();
-    }).catch((err) => console.log(err));
+      showMessage(true, ALERT_MESSAGES.updateProfileSuccess);
+    }).catch((err) => {
+      showMessage(false, ALERT_MESSAGES.updateProfileError);
+      console.log(err);
+    });
   }
 
   function handleLoginUser(email, password) {
+    setIsSaving(true);
     authApi.login(email, password).then((loginResponse) => {
       if (loginResponse.token) {
         setIsLoggedIn(true);
+        setIsSaving(false);
         history.push("/");
+      } else {
+        showMessage(false, ALERT_MESSAGES.loginError);
+        console.log(loginResponse);
       }
     });
   }
@@ -131,42 +150,65 @@ function App() {
     setIsDeletePopupOpen(true);
   }
 
-  function handleConfirmDelete(e) {
-    e.preventDefault();
+  function handleConfirmDelete(event) {
+    event.preventDefault();
+    setIsSaving(true);
     api.removeCard(cardToDelete._id)
       .then(() => {
         setCards((state) =>
           state.filter((card) => card._id !== cardToDelete._id)
         );
         closeAllPopups();
+        showMessage(true, ALERT_MESSAGES.deleteCardSuccess);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        showMessage(false, ALERT_MESSAGES.deleteCardError);
+        console.log(err);
+      });
   }
 
   function handleAddPlaceSubmit(newCard) {
+    setIsSaving(true);
     api.addCard(newCard).then((newCardFull) => {
       setCards([newCardFull, ...cards]);
       closeAllPopups();
-    }).catch((err) => console.log(err));
+      showMessage(true, ALERT_MESSAGES.addCardSuccess);
+    }).catch((err) => {
+      showMessage(false, ALERT_MESSAGES.addCardError);
+      console.log(err);
+    });
   }
 
   function handleUpdateAvatar(avatarUpdate) {
+    setIsSaving(true);
     api.setUserAvatar(avatarUpdate).then((newUserData) => {
       setCurrentUser(newUserData);
       closeAllPopups();
-    }).catch((err) => console.log(err));
+      showMessage(true, ALERT_MESSAGES.updateAvatarSuccess);
+    }).catch((err) => {
+      showMessage(false, ALERT_MESSAGES.updateAvatarError);
+      console.log(err);
+    });
   }
 
   function onRegister({ email, password }) {
+    setIsSaving(true);
     authApi.register(email, password)
-      .then((res) => {
-        if (res.data._id) {
-          setTooltipStatus("success");
-          setIsInfoToolTipOpen(true);
+      .then((userResponse) => {
+        if (userResponse.data._id) {
+          history.push("/signin");
+          showMessage(true, ALERT_MESSAGES.registerSuccess);
         }
       }).catch((err) => {
+      showMessage(false, ALERT_MESSAGES.registerError);
       console.log(err);
     });
+  }
+
+  function showMessage(success, message) {
+    setTooltipStatus(success ? "success" : "error");
+    setAlertMessage(message);
+    setIsInfoToolTipOpen(true);
   }
 
   return (
@@ -188,28 +230,32 @@ function App() {
             loggedIn={isLoggedIn}
           />
           <Route exact path="/signup">
-            <Register onRegister={onRegister} />
+            <Register isSaving={isSaving} onRegister={onRegister} />
           </Route>
           <Route exact path="/signin">
-            <Login onLogin={handleLoginUser} />
+            <Login isSaving={isSaving} onLogin={handleLoginUser} />
           </Route>
         </Switch>
 
         <Footer />
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} />
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} isSaving={isSaving} onUpdateUser={handleUpdateUser}
+                          onClose={closeAllPopups} />
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} isSaving={isSaving} onAddPlace={handleAddPlaceSubmit}
+                       onClose={closeAllPopups} />
         <PopupWithForm
-          title="Are you sure?"
+          title="Are you sure you want to delete this card?"
           name="remove-card"
-          buttonText="Yes"
+          buttonText="Yes, delete"
           isOpen={isDeletePopupOpen}
           onClose={closeAllPopups}
           onSubmit={handleConfirmDelete}
+          isSaving={isSaving}
         />
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar}
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} isSaving={isSaving} onUpdateAvatar={handleUpdateAvatar}
                          onClose={closeAllPopups} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} status={tooltipStatus} />
+        <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} status={tooltipStatus}
+                     message={alertMessage} />
       </div>
     </CurrentUserContext.Provider>
   );

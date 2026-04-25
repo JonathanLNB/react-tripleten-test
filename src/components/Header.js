@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link, useHistory } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 import logoPath from '../images/logo.svg';
 
 function Header ({ onSignOut }) {

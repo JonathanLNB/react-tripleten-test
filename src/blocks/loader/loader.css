@@ -1,0 +1,29 @@
+.loader {
+    display: flex;
+    flex-direction: column;   /* 👈 clave */
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    gap: 12px;               /* espacio entre spinner y texto */
+}
+
+.loader__spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #ccc;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loader__text {
+    font-size: 16px;
+    font-family: Inter, sans-serif;
+    color: #fff;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
