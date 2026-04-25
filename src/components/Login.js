@@ -1,10 +1,10 @@
 import React from 'react';
 
 import '../blocks/login/login.css';
-import * as auth from "../auth/auth";
+import * as auth from "../services/auth";
 import { useHistory } from "react-router-dom";
 
-function Login ({setIsLoggedIn}){
+function Login ({onLogin}){
   const [email, setEmail] = React.useState('');
   const [password, setpassword] = React.useState('');
 
@@ -12,15 +12,7 @@ function Login ({setIsLoggedIn}){
 
   function handleSubmit(e){
     e.preventDefault();
-
-    auth.login(email, password).then((res) => {
-      if (res.token) {
-        setIsLoggedIn(true);
-        setEmail(email);
-        localStorage.setItem('jwt', res.token);
-        history.push('/');
-      }
-    })
+    onLogin(email, password);
   }
 
   return (

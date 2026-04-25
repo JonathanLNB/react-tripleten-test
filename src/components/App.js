@@ -12,7 +12,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
-import * as auth from "../auth/auth.js";
+import * as auth from "../services/auth.js";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -87,6 +87,16 @@ function App() {
     }).catch((err) => console.log(err));
   }
 
+  function handleLoginUser(email, password) {
+    auth.login(email, password).then((loginResponse) => {
+      if (loginResponse.token) {
+        setIsLoggedIn(true);
+        localStorage.setItem("jwt", loginResponse.token);
+        history.push("/");
+      }
+    });
+  }
+
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
@@ -149,7 +159,7 @@ function App() {
             <Register onRegister={onRegister} />
           </Route>
           <Route exact path="/signin">
-            <Login setIsLoggedIn={setIsLoggedIn} />
+            <Login onLogin={handleLoginUser} />
           </Route>
         </Switch>
 
@@ -158,7 +168,7 @@ function App() {
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
         <PopupWithForm title="Are you sure?" name="remove-card" buttonText="Yes" />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar}
-                        onClose={closeAllPopups} />
+                         onClose={closeAllPopups} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} status={tooltipStatus} />
       </div>
