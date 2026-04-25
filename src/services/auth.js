@@ -35,7 +35,7 @@ class AuthApi {
         return response.json();
       })
       .then((data) => {
-        localStorage.setItem("jwt", data.jwt);
+        localStorage.setItem("jwt", data.token);
         localStorage.setItem("email", email);
         return data;
       });

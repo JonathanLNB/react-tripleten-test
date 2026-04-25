@@ -108,7 +108,6 @@ function App() {
     authApi.login(email, password).then((loginResponse) => {
       if (loginResponse.token) {
         setIsLoggedIn(true);
-        localStorage.setItem("jwt", loginResponse.token);
         history.push("/");
       }
     });
