@@ -1,7 +1,7 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function AddPlacePopup({ isOpen, onAddPlace }) {
+function AddPlacePopup({ isOpen, onAddPlace, onClose }) {
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
 
@@ -23,7 +23,7 @@ function AddPlacePopup({ isOpen, onAddPlace }) {
 
   return (
     <PopupWithForm
-      isOpen={isOpen} onSubmit={handleSubmit} title="New place" name="new-card"
+      isOpen={isOpen} onSubmit={handleSubmit} title="New place" onClose={onClose} name="new-card"
     >
       <label className="popup__label">
         <input type="text" name="name" id="place-name"
