@@ -21,6 +21,7 @@ function App() {
 
   const [currentUser, setCurrentUser] = React.useState(null);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [cardToDelete, setCardToDelete] = React.useState(null);
 
   const [cards, setCards] = React.useState([]);
 
@@ -31,11 +32,13 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
 
   React.useEffect(() => {
     let token = localStorage.getItem("jwt");
     if (token) {
       authApi.checkToken(token).then((checkTokenResponse) => {
+        console.log("checkTokenResponse", checkTokenResponse);
         if (checkTokenResponse) {
           setIsLoggedIn(true);
           history.push("/");
@@ -55,6 +58,19 @@ function App() {
       .catch(err => console.log(err));
   }, []);
 
+  React.useEffect(() => {
+    function handleEscClose(evt) {
+      if (evt.key === "Escape") {
+        closeAllPopups();
+      }
+    }
+
+    document.addEventListener("keydown", handleEscClose);
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, []);
+
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -69,11 +85,12 @@ function App() {
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
-
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsInfoToolTipOpen(false);
     setSelectedCard(null);
+    setIsDeletePopupOpen(false);
+    setCardToDelete(null);
   }
 
   function handleCardClick(card) {
@@ -105,10 +122,20 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    api.removeCard(card._id).then(() => {
+    setCardToDelete(card);
+    setIsDeletePopupOpen(true);
+  }
 
-      setCards(cards => cards.filter((c) => c._id !== card._id));
-    }).catch((err) => console.log(err));
+  function handleConfirmDelete(e) {
+    e.preventDefault();
+    api.removeCard(cardToDelete._id)
+      .then(() => {
+        setCards((state) =>
+          state.filter((card) => card._id !== cardToDelete._id)
+        );
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
   }
 
   function handleAddPlaceSubmit(newCard) {
@@ -166,7 +193,14 @@ function App() {
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
-        <PopupWithForm title="Are you sure?" name="remove-card" buttonText="Yes" />
+        <PopupWithForm
+          title="Are you sure?"
+          name="remove-card"
+          buttonText="Yes"
+          isOpen={isDeletePopupOpen}
+          onClose={closeAllPopups}
+          onSubmit={handleConfirmDelete}
+        />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar}
                          onClose={closeAllPopups} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />

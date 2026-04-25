@@ -1,16 +1,20 @@
-import React from 'react';
+import React from "react";
 
 function PopupWithForm({
-  title,
-  name,
-  isOpen,
-  buttonText = 'Save',
-  onSubmit,
-  onClose,
-  children,
-}) {
+                         title,
+                         name,
+                         isOpen,
+                         buttonText = "Save",
+                         onSubmit,
+                         onClose,
+                         children
+                       }) {
   return (
-    <div className={`popup popup_type_${name} ${isOpen ? 'popup_is-opened' : ''}`}>
+    <div className={`popup popup_type_${name} ${isOpen ? "popup_is-opened" : ""}`} onMouseDown={(e) => {
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    }}>
       <div className="popup__content">
         <form className="popup__form" name={name} noValidate onSubmit={onSubmit}>
           <button type="button" className="popup__close" onClick={onClose}></button>
