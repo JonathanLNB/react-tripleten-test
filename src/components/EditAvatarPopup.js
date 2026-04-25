@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose }) {
   const inputRef = React.useRef();
-  const [value, setValue] = React.useState("");
+  const [imageLink, setImageLink] = React.useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -15,7 +15,7 @@ function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose }) {
   function handleChange(e) {
     const input = e.target;
     const { value } = input;
-    setValue(value);
+    setImageLink(value);
   }
 
   return (
@@ -25,7 +25,7 @@ function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose }) {
 
       <label className="popup__label">
         <input type="text" name="avatar" id="owner-avatar"
-               value={value}
+               value={imageLink}
                onChange={handleChange}
                className="popup__input popup__input_type_description" placeholder="Image link"
                required ref={inputRef} />

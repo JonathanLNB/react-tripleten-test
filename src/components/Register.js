@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function Register ({ onRegister }){
-  const [email, setemail] = React.useState('');
-  const [password, setpassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   function handleSubmit(e){
     e.preventDefault();
@@ -21,12 +21,12 @@ function Register ({ onRegister }){
           <label className="auth-form__input">
             <input type="text" name="email" id="email"
               className="auth-form__textfield" placeholder="Email"
-              onChange={e => setemail(e.target.value)} required  />
+              onChange={e => setEmail(e.target.value)} required  />
           </label>
           <label className="auth-form__input">
             <input type="password" name="password" id="password"
               className="auth-form__textfield" placeholder="Password"
-              onChange={e => setpassword(e.target.value)} required  />
+              onChange={e => setPassword(e.target.value)} required  />
           </label>
         </div>
         <div className="auth-form__wrapper">

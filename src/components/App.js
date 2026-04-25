@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, useHistory, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import api from "../services/api";
+import authApi from "../services/auth";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -12,7 +13,6 @@ import AddPlacePopup from "./AddPlacePopup";
 import Register from "./Register";
 import Login from "./Login";
 import InfoTooltip from "./InfoTooltip";
-import * as auth from "../services/auth.js";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -35,7 +35,7 @@ function App() {
   React.useEffect(() => {
     let token = localStorage.getItem("jwt");
     if (token) {
-      auth.checkToken(token).then((checkTokenResponse) => {
+      authApi.checkToken(token).then((checkTokenResponse) => {
         if (checkTokenResponse) {
           setIsLoggedIn(true);
           history.push("/");
@@ -88,7 +88,7 @@ function App() {
   }
 
   function handleLoginUser(email, password) {
-    auth.login(email, password).then((loginResponse) => {
+    authApi.login(email, password).then((loginResponse) => {
       if (loginResponse.token) {
         setIsLoggedIn(true);
         localStorage.setItem("jwt", loginResponse.token);
@@ -126,7 +126,7 @@ function App() {
   }
 
   function onRegister({ email, password }) {
-    auth.register(email, password)
+    authApi.register(email, password)
       .then((res) => {
         if (res.data._id) {
           setTooltipStatus("success");
