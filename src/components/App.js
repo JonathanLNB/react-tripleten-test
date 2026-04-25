@@ -113,6 +113,12 @@ function App() {
     });
   }
 
+  function handleLogout() {
+    setIsLoggedIn(false);
+    localStorage.removeItem("jwt");
+    history.push("/signin");
+  }
+
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
@@ -166,7 +172,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__content">
-        <Header setIsLoggedIn={setIsLoggedIn} />
+        <Header onSignOut={handleLogout} />
         <Switch>
           <ProtectedRoute
             exact

@@ -2,17 +2,12 @@ import React from 'react';
 import { Route, Link, useHistory } from "react-router-dom";
 import logoPath from '../images/logo.svg';
 
-function Header ({ setIsLoggedIn }) {
+function Header ({ onSignOut }) {
 
-  const history = useHistory();
   function handleSignOut(){
     onSignOut();
   }
 
-  function onSignOut() {
-    setIsLoggedIn(false);
-    history.push('/signup');
-  }
   return (
     <header className="header page__section">
       <img src={logoPath} alt="Around The U.S. Logo" className="logo header__logo" />

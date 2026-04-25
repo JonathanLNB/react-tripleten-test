@@ -40,6 +40,7 @@ class AuthApi {
         return data;
       });
   };
+
   checkToken = (token) => {
     return fetch(`${this._address}/users/me`, {
       method: "GET",
