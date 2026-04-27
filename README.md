@@ -7,7 +7,7 @@
 
 ---
 
-## 🚀 Descripción
+## Descripción
 
 Este proyecto es una aplicación basada en React que permite a los usuarios:
 
@@ -24,7 +24,7 @@ Se realizaron mejoras importantes en arquitectura, manejo de estado, experiencia
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+##  Tecnologías utilizadas
 
 - React
 - Create React App
@@ -38,7 +38,7 @@ Se realizaron mejoras importantes en arquitectura, manejo de estado, experiencia
 
 ---
 
-## ⚙️ Requisitos
+##  Requisitos
 
 Se recomienda utilizar la siguiente versión de Node.js:
 
@@ -54,7 +54,7 @@ node -v
 
 ---
 
-## 📦 Instalación
+##  Instalación
 
 Clona el repositorio:
 
@@ -76,9 +76,14 @@ npm install
 
 ---
 
-## 🧪 Ejecución en desarrollo
+##  Ejecución
+Renombra el archivo ```.env.template``` a ```.env```:
 
-Para correr el proyecto en modo desarrollo:
+```bash
+mv .env.template .env
+```
+
+Para correr el proyecto:
 
 ```bash
 npm start
@@ -86,7 +91,7 @@ npm start
 
 ---
 
-## 🏗️ Construcción para producción
+## ️ Construcción para producción
 
 Para generar una versión optimizada del proyecto:
 
@@ -98,7 +103,7 @@ Este comando genera la carpeta `build`, lista para ser desplegada.
 
 ---
 
-## 🌐 Despliegue
+##  Despliegue
 
 El proyecto puede publicarse en GitHub Pages.
 
@@ -107,12 +112,9 @@ Comando sugerido:
 ```bash
 npm run deploy
 ```
-
-> En caso de usar GitHub Pages con rutas internas, se recomienda utilizar `HashRouter` para evitar errores al refrescar rutas como `/signin` o `/signup`.
-
 ---
 
-## 📁 Estructura general del proyecto
+##  Estructura general del proyecto
 
 ```txt
 src/
@@ -150,9 +152,9 @@ src/
 
 ---
 
-## 🧠 Mejoras implementadas
+## Mejoras implementadas
 
-### 🔹 Routing
+###  Routing
 
 Se corrigieron errores relacionados con el manejo de rutas y rutas protegidas:
 
@@ -164,7 +166,7 @@ Se corrigieron errores relacionados con el manejo de rutas y rutas protegidas:
 
 ---
 
-### 🔹 Autenticación y JWT
+###  Autenticación y JWT
 
 Se realizaron ajustes en la lógica de autenticación:
 
@@ -176,7 +178,7 @@ Se realizaron ajustes en la lógica de autenticación:
 
 ---
 
-### 🔹 Manejo de estado
+###  Manejo de estado
 
 Se mejoró la gestión del estado dentro de la aplicación:
 
@@ -188,7 +190,7 @@ Se mejoró la gestión del estado dentro de la aplicación:
 
 ---
 
-### 🔹 Context API
+###  Context API
 
 El proyecto utiliza `CurrentUserContext` para compartir la información del usuario entre componentes.
 
@@ -196,7 +198,7 @@ Esto permite que componentes como `Main` y `Card` accedan a los datos del usuari
 
 ---
 
-### 🔹 Popups y modales
+###  Popups y modales
 
 Se mejoró el comportamiento de los popups:
 
@@ -213,7 +215,7 @@ Se mejoró el comportamiento de los popups:
 
 ---
 
-### 🔹 Eliminación de tarjetas
+###  Eliminación de tarjetas
 
 Se agregó una confirmación antes de eliminar una tarjeta.
 
@@ -228,7 +230,7 @@ Flujo implementado:
 Esto evita eliminaciones accidentales y mejora la experiencia de usuario.
 
 ---
-### 🔹 Formularios
+###  Formularios
 
 Se mejoró el manejo de formularios:
 
@@ -240,7 +242,7 @@ Se mejoró el manejo de formularios:
 
 ---
 
-### 🔹 Loader / estado de carga
+###  Loader / estado de carga
 
 Se agregó un loader para mostrar que la información se está cargando mientras se obtienen:
 
@@ -251,7 +253,7 @@ Esto mejora la experiencia del usuario durante la carga inicial de la aplicació
 
 ---
 
-### 🔹 Mensajes de éxito y error
+###  Mensajes de éxito y error
 
 Se implementaron mensajes más claros de acuerdo con la acción realizada:
 
@@ -273,7 +275,7 @@ Los mensajes fueron centralizados en un archivo de constantes para mejorar mante
 
 ---
 
-## 🧼 Clean Code
+##  Clean Code
 
 Se aplicaron prácticas de Clean Code para mejorar la legibilidad y mantenibilidad del proyecto:
 
@@ -287,7 +289,7 @@ Se aplicaron prácticas de Clean Code para mejorar la legibilidad y mantenibilid
 
 ---
 
-## 🧱 Principios SOLID aplicados
+##  Principios SOLID aplicados
 
 ### Single Responsibility Principle (SRP)
 
@@ -303,7 +305,7 @@ Por ejemplo, los popups se encargan principalmente de mostrar UI y manejar el su
 
 ---
 
-## 🔐 Variables de entorno
+## Variables de entorno
 
 Se recomienda utilizar variables de entorno para evitar valores hardcodeados dentro del código.
 
@@ -319,21 +321,3 @@ Uso en el proyecto:
 ```js
 process.env.REACT_APP_API_URL
 ```
-
----
-
-## ⚠️ Consideraciones
-
-- No almacenar secretos reales en frontend.
-- Mantener actualizado el archivo `.gitignore`.
-- Evitar versionar archivos como `.DS_Store`, `.idea` o `node_modules`.
-- Revisar periódicamente vulnerabilidades con `npm audit`.
-- Mantener dependencias actualizadas cuando sea posible.
-
----
-
-## 👨‍💻 Autor
-
-Proyecto revisado y mejorado aplicando buenas prácticas de React, Clean Code y principios SOLID.
-
----
